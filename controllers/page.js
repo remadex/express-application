@@ -24,3 +24,35 @@ exports.detail = async (req, res) => {
     movie: movie
   });
 };
+
+exports.reviews = async (req, res) => {
+  let movie = await Movie.find({}, {})
+    .sort({ "fields.rank": 1 })
+    .limit(8);
+
+  let movies = await Movie.find().sort({
+    "fields.title": 1
+  });
+  let genres = [];
+  let years = [];
+
+  let i = 2000,
+    current = parseInt(new Date().getUTCFullYear());
+
+  await movies.forEach(async movie => {
+    await movie.fields.genres.forEach(async genre => {
+      if (genres.lastIndexOf(genre) === -1) {
+        await genres.push(genre.trim());
+      }
+    });
+  });
+  for (i; i <= current; i++) {
+    years.push(i);
+  }
+
+  res.render("pages/movies", {
+    movies: movie,
+    genres: genres.sort(),
+    years: years
+  });
+};
