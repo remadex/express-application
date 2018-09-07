@@ -39,21 +39,40 @@
     }
   });
 
-  $(window).load(function() {});
+  $("#years, #category").change(function(e) {
+    e.preventDefault();
+    $.ajax({
+      url: "/reviews/" + $("#category").val() + "/" + $("#years").val() + "/",
+      type: "GET",
+      success: function(response, status) {
+        $(".movie-list").html(response);
+      },
+      error: function(error, response, status) {
+        console.log(error);
+      }
+    });
+  });
 
-  //   $("#category").change(function() {
-  //     let content = ``;
-  //     if ($("#category").val() == "drama") {
-  //       $(".movie-list").text("Voici mon texte 1, youpi !");
-  //     }
-  //     if ($("#category").val() == "fantasy") {
-  //       $(".movie-list").text("Voici mon texte 2, youpi !");
-  //     }
-  //     if ($("#category").val() == "horror") {
-  //       $(".movie-list").text("Voici mon texte 3, youpi !");
-  //     }
-  //     if ($("#category").val() == "adventure") {
-  //       $(".movie-list").text("Voici mon texte 4, youpi !");
-  //     }
-  //   });
+  $(".page-number").click(function(e) {
+    e.preventDefault();
+    let number = $(this).text();
+    $.ajax({
+      url:
+        "/reviews/" +
+        $("#category").val() +
+        "/" +
+        $("#years").val() +
+        "/" +
+        number,
+      type: "GET",
+      success: function(response, status) {
+        $(".movie-list").html(response);
+      },
+      error: function(error, response, status) {
+        console.log(error);
+      }
+    });
+  });
+
+  $(window).load(function() {});
 })(jQuery, document, window);

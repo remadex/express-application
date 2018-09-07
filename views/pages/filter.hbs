@@ -1,0 +1,12 @@
+{{#each movies as |movie|}}
+<div class="movie">
+    {{#if movie.fields.image_url}}
+    <figure class="movie-poster"><img src="{{movie.fields.image_url}}" alt="{{movie.fields.title}}"></figure>
+    {{else}}
+    <figure class="movie-poster"><img src="https://vignette.wikia.nocookie.net/lucidia/images/4/40/Lucidia_error.jpg/revision/latest?cb=20170213032619"
+            alt="Douze"></figure>
+    {{/if}}
+    <div class="movie-title"><a href="/details/{{movie.id}}">{{movie.fields.title}}</a></div>
+    <p>{{movie.fields.plot}}</p>
+</div>
+{{/each}}

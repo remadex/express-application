@@ -36,7 +36,7 @@ exports.reviews = async (req, res) => {
   let genres = [];
   let years = [];
 
-  let i = 2000,
+  let i = 1998,
     current = parseInt(new Date().getUTCFullYear());
 
   await movies.forEach(async movie => {
@@ -54,5 +54,41 @@ exports.reviews = async (req, res) => {
     movies: movie,
     genres: genres.sort(),
     years: years
+  });
+};
+
+exports.filterReviews = async (req, res) => {
+  let years = req.params.years;
+  let category = req.params.category;
+  let movies = await Movie.find({
+    $and: [
+      { "fields.genres": { $in: [category] } },
+      { "fields.year": { $in: [years] } }
+    ]
+  }).limit(12);
+  res.render("pages/filter", {
+    movies: movies,
+    layout: null
+  });
+};
+exports.filterReviewsPage = async (req, res) => {
+  let years = req.params.years;
+  let category = req.params.category;
+  let page = req.params.page;
+  page = page - 1;
+  let movies = await Movie.find(
+    {
+      $and: [
+        { "fields.genres": { $in: [category] } },
+        { "fields.year": { $in: [years] } }
+      ]
+    },
+    {}
+  )
+    .skip(12 * page)
+    .limit(12);
+  res.render("pages/filter", {
+    movies: movies,
+    layout: null
   });
 };
